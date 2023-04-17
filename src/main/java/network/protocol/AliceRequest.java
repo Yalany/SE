@@ -104,7 +104,7 @@ public final class AliceRequest {
     public Markup markup;
 
     /**
-     *  Слова и именованные сущности, которые Диалоги извлекли из запроса пользователя.
+     *  Слова, которые Диалоги извлекли из запроса пользователя.
      */
     @SerializedName("nlu")
     public Nlu nlu;
@@ -123,7 +123,7 @@ public final class AliceRequest {
        * Возможно только значение true. Если признак не применим, это свойство не включается в ответ.
        */
       @SerializedName("dangerous_context")
-      boolean dangerous_context;
+      boolean dangerousContext;
     }
 
     public static final class Nlu {
@@ -174,11 +174,13 @@ public final class AliceRequest {
        * Идентификатор пользователя Яндекса, единый для всех приложений и устройств.
        * Этот идентификатор уникален для пары «пользователь — навык»: в разных навыках значение свойства user_id для одного и того же пользователя будет различаться.
        */
+      @SerializedName("user_id")
       public String userId;
 
       /**
        *  Токен для OAuth-авторизации, который также передается в заголовке Authorization для навыков с настроенной связкой аккаунтов.
        */
+      @SerializedName("access_token")
       public String accessToken;
     }
   }
