@@ -16,11 +16,11 @@ public final class GameResources {
     }
 
     public int getAmount(String key) {
-        return resources.get(key).getValue();
+        return resources.get(key).getAmount();
     }
 
     void modifyAmount(String key, int modification) {
-        resources.get(key).modifyValue(modification);
+        resources.get(key).modifyAmount(modification);
     }
 
     public static Builder builder() {
@@ -29,23 +29,23 @@ public final class GameResources {
 
     private static final class GameResource {
         private final String displayName;
-        private int value;
+        private int amount;
 
-        GameResource(String displayName, int value) {
+        GameResource(String displayName, int amount) {
             this.displayName = displayName;
-            this.value = value;
+            this.amount = amount;
         }
 
         String getDisplayName() {
             return displayName;
         }
 
-        int getValue() {
-            return value;
+        int getAmount() {
+            return amount;
         }
 
-        void modifyValue(int addition) {
-            this.value += addition;
+        void modifyAmount(int modification) {
+            this.amount += modification;
         }
     }
 
