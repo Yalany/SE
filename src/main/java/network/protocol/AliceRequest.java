@@ -62,7 +62,7 @@ public final class AliceRequest {
         @SerializedName("interfaces")
         public Interfaces interfaces;
 
- static final class Interfaces {
+    static final class Interfaces {
             /**
              *  Пользователь может видеть ответ навыка на экране и открывать ссылки в браузере.
              */
