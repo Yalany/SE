@@ -7,8 +7,15 @@ public class EventDeck {
   private final int size; // size of the deck
   private final boolean isEndless; // if true deck will loop indefinitely and popped events will be reset to 0
   private final int[] events; // 0 is no event present (aka random event), number is event id in db
-
   private int pointer; // points at next player event
+
+  public EventDeck(int size, boolean isEndless, int[] events, int pointer) {
+    this.size = size;
+    this.isEndless = isEndless;
+    this.events = new int[size];
+    IntStream.range(0, size - 1).forEach(i -> this.events[i] = events[i]);
+    this.pointer = pointer;
+  }
 
   public EventDeck(int size, boolean isEndless) {
     this.size = size;
