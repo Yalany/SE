@@ -3,7 +3,6 @@ package game;
 import java.util.stream.IntStream;
 
 public class EventDeck {
-
   private final int size; // size of the deck
   private final boolean isEndless; // if true deck will loop indefinitely and popped events will be reset to 0
   private final int[] events; // 0 is no event present (aka random event), number is event id in db
