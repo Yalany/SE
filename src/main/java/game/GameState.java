@@ -1,11 +1,10 @@
 package game;
 
 import com.google.gson.annotations.SerializedName;
-import util.FileUtils;
 
 public class GameState {
-  @SerializedName("user_id")
-  private String userId;
+  @SerializedName("game_id")
+  public final String gameId;
 
   @SerializedName("player_resources")
   private PlayerResources playerResources;
@@ -16,17 +15,7 @@ public class GameState {
   @SerializedName("deck_pointer")
   private int deckPointer;
 
-  GameState(final String userId) {
-    this.userId = userId;
-    if (FileUtils.fileExists(path(userId)))
-      Config.GSON.fromJson(FileUtils.readFile(path(userId)), GameState.class);
-  }
-
-  void save() {
-    FileUtils.writeFile(path(userId), Config.GSON.toJson(this));
-  }
-
-  private static String path(final String userId) {
-    return Config.GAME_DATA_DIRECTORY + userId + Config.JSON_POSTFIX;
+  public GameState(final String gameId) {
+    this.gameId = gameId;
   }
 }
