@@ -17,5 +17,8 @@ public class GameState {
 
   public GameState(final String gameId) {
     this.gameId = gameId;
+    this.playerResources = new PlayerResources();
+    this.eventDeck = new EventDeck(Config.DEFAULT_DECK_SIZE, true);
+    this.deckPointer = 0;
   }
 }
