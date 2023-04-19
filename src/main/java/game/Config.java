@@ -2,8 +2,12 @@ package game;
 
 import com.google.gson.Gson;
 
-class Config {
-  public final static String GAME_DATA_DIRECTORY = "../user_data/";
-  public final static String JSON_POSTFIX = ".json";
-  public final static Gson GSON = new Gson();
+public interface Config {
+  String GAME_DATA_DIRECTORY = "../../resources/user_data/";
+  String JSON_POSTFIX = ".json";
+  Gson GSON = new Gson();
+
+  static String path(final String resourceId) {
+    return Config.GAME_DATA_DIRECTORY + resourceId + Config.JSON_POSTFIX;
+  }
 }

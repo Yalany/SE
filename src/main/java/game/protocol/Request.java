@@ -9,11 +9,11 @@ public class Request {
     this.nlpTokens = nlpTokens;
   }
 
-  public String userId() {
+  public String getUserId() {
     return userId;
   }
 
-  public String[] tokens() {
+  public String[] getNlpTokens() {
     return nlpTokens;
   }
 }

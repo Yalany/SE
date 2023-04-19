@@ -3,7 +3,7 @@ package game;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class PlayerResources {
+public class PlayerResources {
   private final Map<String, Integer> resources = new HashMap<>();
 
   public int getAmount(String resourceName) {
