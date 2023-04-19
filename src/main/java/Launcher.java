@@ -11,32 +11,40 @@ import java.net.InetSocketAddress;
 
 public class Launcher {
   private final static int PORT = 8000;
-  private final static int BACKLOG = 0;
   private final static String CONTEXT_PATH = "/game";
-
+  private final static String ALICE_API_VERSION = "1.0";
   private final static Game GAME = new Game();
 
   public static void main(final String[] args) throws IOException {
-    var server = HttpServer.create(new InetSocketAddress(PORT), BACKLOG);
+    var server = HttpServer.create(new InetSocketAddress(PORT), 0);
     server.createContext(CONTEXT_PATH, httpExchange -> {
-      var request = new String(httpExchange.getRequestBody().readAllBytes());
-      var response = getResponse(Config.GSON.fromJson(request, AliceRequest.class));
+      var response = getResponse(new String(httpExchange.getRequestBody().readAllBytes()));
       httpExchange.sendResponseHeaders(200, response.getBytes().length);
-      var responseBody = httpExchange.getResponseBody();
-      responseBody.write(response.getBytes());
-      responseBody.close();
+      httpExchange.getResponseBody().write(response.getBytes());
+      httpExchange.getResponseBody().close();
     });
     server.start();
   }
 
-  private static String getResponse(final AliceRequest aliceRequest) {
-    var gameRequest = new Request(aliceRequest.session.user.userId, aliceRequest.request.nlu.tokens);
-    var gameResponse = GAME.handleRequest(gameRequest);
-    var aliceResponse = formAliceResponse(gameResponse);
-    return Config.GSON.toJson(aliceResponse);
+  private static String getResponse(final String request) {
+    var aliceRequest = Config.GSON.fromJson(request, AliceRequest.class);
+    return Config.GSON.toJson(
+        formAliceResponse(
+            GAME.handleRequest(
+                new Request(aliceRequest.session.user.userId, aliceRequest.request.nlu.tokens))));
   }
 
   private static AliceResponse formAliceResponse(final Response gameResponse) {
-    return new AliceResponse();
+    var result = new AliceResponse();
+    result.response.text = gameResponse.responseText;
+    result.response.tts = gameResponse.responseText;
+    result.response.endSession = false;
+    result.response.buttons = new AliceResponse.Response.Button[gameResponse.options.length];
+    for (int i = 0; i < gameResponse.options.length; i++) {
+      result.response.buttons[i].title = gameResponse.options[i];
+      result.response.buttons[i].hide = true;
+    }
+    result.version = ALICE_API_VERSION;
+    return result;
   }
 }
