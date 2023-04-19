@@ -9,7 +9,8 @@ import network.protocol.AliceResponse;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-public class Launcher {  private final static int PORT = 8000;
+public class Launcher {
+  private final static int PORT = 8000;
   private final static int BACKLOG = 0;
   private final static String CONTEXT_PATH = "/game";
 
@@ -28,7 +29,7 @@ public class Launcher {  private final static int PORT = 8000;
     server.start();
   }
 
-  static String getResponse(final AliceRequest aliceRequest) {
+  private static String getResponse(final AliceRequest aliceRequest) {
     var gameRequest = new Request(aliceRequest.session.user.userId, aliceRequest.request.nlu.tokens);
     var gameResponse = GAME.handleRequest(gameRequest);
     var aliceResponse = formAliceResponse(gameResponse);
