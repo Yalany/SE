@@ -4,8 +4,8 @@ import game.Config;
 import game.GameState;
 import util.FileUtils;
 
-public class GameStateRepository {
-  public static GameState get(String gameId) {
+class GameStateRepository {
+  static GameState get(String gameId) {
     if (!FileUtils.fileExists(Config.path(gameId)))
       save(new GameState(gameId));
     return Config.GSON.fromJson(FileUtils.readFile(Config.path(gameId)), GameState.class);

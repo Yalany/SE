@@ -6,6 +6,7 @@ public interface Config {
   String GAME_DATA_DIRECTORY = "../../resources/user_data/";
   String JSON_POSTFIX = ".json";
   int DEFAULT_DECK_SIZE = 60;
+  long USER_DATA_CACHE_TIMEOUT_SECONDS = 600;
 
   Gson GSON = new Gson();
 
