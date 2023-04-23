@@ -11,15 +11,18 @@ public class AddressedDiscRepository<T> implements Repository<T> {
     this.typeClass = typeClass;
   }
 
+  @Override
   public T load(String id) {
     return SerializationUtils.GSON.fromJson(FileUtils.readFile(storageAddressFunction.apply(id)), typeClass);
   }
 
+  @Override
   public void save(String id, T t) {
     assert t != null;
     FileUtils.writeFile(storageAddressFunction.apply(id), SerializationUtils.GSON.toJson(t));
   }
 
+  @Override
   public boolean contains(String id) {
     return FileUtils.fileExists(storageAddressFunction.apply(id));
   }

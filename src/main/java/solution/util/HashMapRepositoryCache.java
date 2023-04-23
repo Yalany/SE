@@ -16,15 +16,18 @@ public final class HashMapRepositoryCache<T> implements Cache<T> {
     this.storageDelay = storageDelayMillis;
   }
 
+  @Override
   public void put(String id, T t) {
     cache.put(id, t);
     resetTimeout(id);
   }
 
+  @Override
   public boolean contains(String id) {
     return cache.containsKey(id);
   }
 
+  @Override
   public T get(final String id) {
     assert cache.containsKey(id) : "attempt to get non-cached data from cash with id " + id;
     resetTimeout(id);
