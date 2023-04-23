@@ -24,6 +24,14 @@ public class EventDeck {
     this.pointer = 0;
   }
 
+  public int[] getEvents() {
+    return events;
+  }
+
+  public int getPointer() {
+    return pointer;
+  }
+
   // puts event in place of first random event starting from specified offset
   void shuffleIn(int eventId, int offset) {
     if (offset < 0)

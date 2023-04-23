@@ -22,7 +22,6 @@ public class Game {
     var gameId = gameState.getGameId();
     var playerResources = gameState.getPlayerResources();
     var eventDeck = gameState.getEventDeck();
-    var deckPointer = gameState.getDeckPointer();
 
     var nlpTokens = request.getNlpTokens();
     // todo: задействовать nlp модуль для выбора нужных GameStateModification в соотв. с ответом юзера

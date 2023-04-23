@@ -12,14 +12,10 @@ public class GameState {
   @SerializedName("event_deck")
   private EventDeck eventDeck;
 
-  @SerializedName("deck_pointer")
-  private int deckPointer;
-
   public GameState(final String gameId, int deckSize, boolean isEndless) {
     this.gameId = gameId;
     this.playerResources = new PlayerResources();
     this.eventDeck = new EventDeck(deckSize, isEndless);
-    this.deckPointer = 0;
   }
 
   public String getGameId() {
@@ -32,9 +28,5 @@ public class GameState {
 
   public EventDeck getEventDeck() {
     return eventDeck;
-  }
-
-  public int getDeckPointer() {
-    return deckPointer;
   }
 }
