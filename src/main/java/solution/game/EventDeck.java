@@ -1,11 +1,20 @@
 package solution.game;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.stream.IntStream;
 
 public class EventDeck {
+  @SerializedName("size")
   private final int size; // size of the deck
+
+  @SerializedName("is_endless")
   private final boolean isEndless; // if true deck will loop indefinitely and popped events will be reset to 0
+
+  @SerializedName("events")
   private final int[] events; // 0 is no event present (aka random event), number is event id in db
+
+  @SerializedName("pointer")
   private int pointer; // points at next player event
 
   public EventDeck(int size, boolean isEndless, int[] events, int pointer) {
