@@ -17,7 +17,7 @@ public class EventDeck {
   @SerializedName("pointer")
   private int pointer; // points at next player event
 
-  public EventDeck(int size, boolean isEndless, int[] events, int pointer) {
+  EventDeck(int size, boolean isEndless, int[] events, int pointer) {
     this.size = size;
     this.isEndless = isEndless;
     this.events = new int[size];
@@ -25,20 +25,12 @@ public class EventDeck {
     this.pointer = pointer;
   }
 
-  public EventDeck(int size, boolean isEndless) {
+  EventDeck(int size, boolean isEndless) {
     this.size = size;
     this.isEndless = isEndless;
     this.events = new int[size];
     IntStream.range(0, size - 1).forEach(i -> this.events[i] = 0);
     this.pointer = 0;
-  }
-
-  public int[] getEvents() {
-    return events;
-  }
-
-  public int getPointer() {
-    return pointer;
   }
 
   // puts event in place of first random event starting from specified offset

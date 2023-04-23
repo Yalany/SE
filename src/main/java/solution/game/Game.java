@@ -9,10 +9,12 @@ import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
 public class Game {
-  private final Repository<GameState> repository = new AddressedDiscRepository<>(Game::pathFunction, GameState.class);
-  private final Cache<GameState> cache = new HashMapRepositoryCache<>(repository, Config.GAME_CACHE_TIMEOUT_MILLIS);
+  private final Repository<GameState> repository;
+  private final Cache<GameState> cache;
 
   public Game() {
+    repository = new AddressedDiscRepository<>(s -> Config.GAME_DATA_DIRECTORY + s + Config.JSON_POSTFIX, GameState.class);
+    cache = new HashMapRepositoryCache<>(repository, Config.GAME_CACHE_TIMEOUT_MILLIS);
   }
 
   public Response handleRequest(Request request) {
@@ -20,7 +22,6 @@ public class Game {
     var gameState = getGameState(id);
 
     var gameId = gameState.getGameId();
-    var playerResources = gameState.getPlayerResources();
     var eventDeck = gameState.getEventDeck();
 
     var nlpTokens = request.getNlpTokens();
@@ -31,10 +32,6 @@ public class Game {
     // todo: формирование финального ответа, который будет напрямую озвучен пользователю
     // Response(String responseText, String[] options)
     return null;
-  }
-
-  private static String pathFunction(final String resourceId) {
-    return Config.GAME_DATA_DIRECTORY + resourceId + Config.JSON_POSTFIX;
   }
 
   private GameState getGameState(String id) {
