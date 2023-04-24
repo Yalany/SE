@@ -1,24 +1,18 @@
 package solution.game;
 
 public class Resource {
-  private final String uid;
-  private final String displayName;
+  private final String name;
   private final int startingAmount;
   private final int minimumAmount;
 
-  public Resource(String uid, String displayName, int startingAmount, int minimumAmount) {
-    this.uid = uid;
-    this.displayName = displayName;
+  public Resource(String name, int startingAmount, int minimumAmount) {
+    this.name = name;
     this.startingAmount = startingAmount;
     this.minimumAmount = minimumAmount;
   }
 
-  public String getUid() {
-    return uid;
-  }
-
-  public String getDisplayName() {
-    return displayName;
+  public String getName() {
+    return name;
   }
 
   public int getStartingAmount() {
