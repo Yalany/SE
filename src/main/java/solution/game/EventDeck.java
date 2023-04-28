@@ -1,6 +1,7 @@
 package solution.game;
 
 import com.google.gson.annotations.SerializedName;
+import solution.Config;
 
 import java.util.stream.IntStream;
 
@@ -12,29 +13,21 @@ public class EventDeck {
   private final boolean isEndless; // if true deck will loop indefinitely and popped events will be reset to 0
 
   @SerializedName("events")
-  private final int[] events; // 0 is no event present (aka random event), number is event id in db
+  private final String[] eventIds; // 0 is no event present (aka random event), number is event id in db
 
   @SerializedName("pointer")
   private int pointer; // points at next player event
 
-  EventDeck(int size, boolean isEndless, int[] events, int pointer) {
-    this.size = size;
-    this.isEndless = isEndless;
-    this.events = new int[size];
-    IntStream.range(0, size - 1).forEach(i -> this.events[i] = events[i]);
-    this.pointer = pointer;
-  }
-
   EventDeck(int size, boolean isEndless) {
     this.size = size;
     this.isEndless = isEndless;
-    this.events = new int[size];
-    IntStream.range(0, size - 1).forEach(i -> this.events[i] = 0);
+    this.eventIds = new String[size];
+    IntStream.range(0, size - 1).forEach(i -> this.eventIds[i] = "");
     this.pointer = 0;
   }
 
   // puts event in place of first random event starting from specified offset
-  void shuffleIn(int eventId, int offset) {
+  void shuffleIn(String eventUid, int offset) {
     if (offset < 0)
       throw new IllegalArgumentException("offset can't be lower than 0");
     if (offset >= size)
@@ -44,8 +37,8 @@ public class EventDeck {
 
     // resolving case when event wanted to be shuffled in from very top of deck
     if (offset == 0) {
-      if (events[pointer] == 0) {
-        events[pointer] = eventId;
+      if (eventIds[pointer].equals("")) {
+        eventIds[pointer] = eventUid;
         return;
       }
       movePointerBy(1);
@@ -54,28 +47,32 @@ public class EventDeck {
     movePointerBy(offset);
 
     // traversing deck in search of room for event
-    while (events[pointer] != 0 && pointer != currentPointer)
+    while (!eventIds[pointer].equals("") && pointer != currentPointer)
       movePointerBy(1);
 
     // if pointers match then there is no room in deck for event
     if (pointer == currentPointer)
       return;
 
-    events[pointer] = eventId;
+    eventIds[pointer] = eventUid;
     pointer = currentPointer;
   }
 
-  void putOnTop(int eventId) {
+  void putOnTop(String eventUid) {
     movePointerBy(-1);
-    events[pointer] = eventId;
+    eventIds[pointer] = eventUid;
   }
 
-  int pop() {
-    var event = events[pointer];
-    if (isEndless) events[pointer] = 0;
-    else events[pointer] = -1;
+  String pop() {
+    var event = eventIds[pointer];
+    if (isEndless) eventIds[pointer] = "";
+    else eventIds[pointer] = Config.GAME_DECK_UNUSABLE_EVENT_SLOT_NAME;
     movePointerBy(1);
     return event;
+  }
+
+  String peek() {
+    return eventIds[pointer];
   }
 
   private void movePointerBy(int steps) {

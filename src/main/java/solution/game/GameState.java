@@ -25,17 +25,11 @@ public class GameState {
     return gameId;
   }
 
+  public Map<String, Integer> getPlayerResources() {
+    return playerResources;
+  }
+
   public EventDeck getEventDeck() {
     return eventDeck;
-  }
-
-  public int getResourceAmount(String resourceName) {
-    assert playerResources.containsKey(resourceName) : "Resource " + resourceName + " does not exist";
-    return playerResources.get(resourceName);
-  }
-
-  void modifyResourceAmount(String resourceName, int modification) {
-    assert playerResources.containsKey(resourceName) : "Resource " + resourceName + " does not exist";
-    playerResources.put(resourceName, playerResources.get(resourceName) + modification);
   }
 }

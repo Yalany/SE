@@ -11,11 +11,16 @@ public class GameData {
   private final HashMap<String, Event> events;
   private final HashMap<String, Resource> resources;
 
+  public GameData() {
+    this.events = new HashMap<>();
+    this.resources = new HashMap<>();
+  }
+
   // todo: read from file
   public GameData(Event[] events, Resource[] resources) {
     this.events = new HashMap<>();
     this.resources = new HashMap<>();
-    Arrays.stream(events).forEach(e -> this.events.put(e.getUid(), e));
+    Arrays.stream(events).forEach(e -> this.events.put(e.getId(), e));
     Arrays.stream(resources).forEach(r -> this.resources.put(r.getName(), r));
   }
 
