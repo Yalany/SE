@@ -15,10 +15,10 @@ public class GameState {
   @SerializedName("event_deck")
   private EventDeck eventDeck;
 
-  public GameState(final String gameId, int deckSize, boolean isDeckEndless) {
+  public GameState(final String gameId, int deckSize) {
     this.gameId = gameId;
     this.playerResources = new HashMap<>();
-    this.eventDeck = new EventDeck(deckSize, isDeckEndless);
+    this.eventDeck = new EventDeck(deckSize);
   }
 
   public String getGameId() {

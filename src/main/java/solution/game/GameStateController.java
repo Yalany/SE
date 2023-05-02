@@ -1,6 +1,5 @@
 package solution.game;
 
-import solution.Config;
 import solution.game.gamedata.GameData;
 
 import java.util.Map;
@@ -35,18 +34,10 @@ public class GameStateController {
   }
 
   private void shuffleEvent(String eventId, int offset) {
-    eventDeck.shuffleIn(eventId, offset);
-  }
-
-  private void putEventOnTop(String eventId) {
-    eventDeck.putOnTop(eventId);
+    eventDeck.shuffle(eventId, offset);
   }
 
   private Event getCurrentEventData() {
     return currentEvent;
-  }
-
-  private boolean isDeckEmpty() {
-    return eventDeck.peek().equals(Config.GAME_DECK_UNUSABLE_EVENT_SLOT_NAME);
   }
 }

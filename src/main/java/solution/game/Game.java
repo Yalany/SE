@@ -36,6 +36,6 @@ public class Game {
   private GameState getGameState(String id) {
     if (gameStateCache.contains(id)) return gameStateCache.get(id);
     if (gameStateRepository.contains(id)) return gameStateRepository.load(id);
-    return new GameState(id, Config.GAME_DECK_DEFAULT_SIZE, Config.GAME_DECK_IS_ENDLESS);
+    return new GameState(id, Config.GAME_DECK_DEFAULT_SIZE);
   }
 }

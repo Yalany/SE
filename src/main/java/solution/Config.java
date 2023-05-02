@@ -9,8 +9,7 @@ public interface Config {
   String  SERVER_CONTEXT_PATH = "/game";
 
   String  GAME_DATA_DIRECTORY = "../../resources/user_data/";
-  int     GAME_DECK_DEFAULT_SIZE = 60;
-  boolean GAME_DECK_IS_ENDLESS = true;
-  String  GAME_DECK_UNUSABLE_EVENT_SLOT_NAME = "blocked";
+  int     GAME_DECK_DEFAULT_SIZE = 30;
+  String  GAME_DECK_EMPTY_EVENT_SLOT_NAME = "";
   long    GAME_CACHE_TIMEOUT_MILLIS = 600 * 10000;
 }

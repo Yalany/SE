@@ -6,88 +6,62 @@ import solution.Config;
 import java.util.stream.IntStream;
 
 public class EventDeck {
+  /**
+   * size of the deck
+   */
   @SerializedName("size")
-  private final int size; // size of the deck
+  private final int size;
 
-  @SerializedName("is_endless")
-  private final boolean isEndless; // if true deck will loop indefinitely and popped events will be reset to 0
-
+  /**
+   * 0 is no event present (aka random event), number is event id in db
+   */
   @SerializedName("events")
-  private final String[] eventIds; // 0 is no event present (aka random event), number is event id in db
+  private final String[] eventIds;
 
+  /**
+   * points at next player event
+   */
   @SerializedName("pointer")
-  private int pointer; // points at next player event
+  private int pointer;
 
-  EventDeck(int size, boolean isEndless) {
+  EventDeck(int size) {
     this.size = size;
-    this.isEndless = isEndless;
     this.eventIds = new String[size];
-    IntStream.range(0, size - 1).forEach(i -> this.eventIds[i] = "");
+    IntStream.range(0, size - 1).forEach(i -> this.eventIds[i] = Config.GAME_DECK_EMPTY_EVENT_SLOT_NAME);
     this.pointer = 0;
   }
 
-  // puts event in place of first random event starting from specified offset
-  void shuffleIn(String eventUid, int offset) {
-    if (offset < 0)
-      throw new IllegalArgumentException("offset can't be lower than 0");
-    if (offset >= size)
-      throw new IllegalArgumentException("offset can't be greater or equal than deck size");
+  /**
+   * puts event in place of first empty event slot starting from specified offset from current pointer position
+   * @param eventId event to be placed in deck
+   * @param offset offset from current pointer position
+   */
+  void shuffle(String eventId, int offset) {
+    assert 0 <= offset && pointer + offset < size : "offset can't be lower than 0 or greater or equal than deck size";
 
-    var currentPointer = pointer;
-
-    // resolving case when event wanted to be shuffled in from very top of deck
-    if (offset == 0) {
-      if (eventIds[pointer].equals("")) {
-        eventIds[pointer] = eventUid;
+    var tempPointer = pointer + offset;
+    while (tempPointer < size) {
+      if (eventIds[tempPointer].equals(Config.GAME_DECK_EMPTY_EVENT_SLOT_NAME)) {
+        eventIds[tempPointer] = eventId;
         return;
       }
-      movePointerBy(1);
+      tempPointer++;
     }
-
-    movePointerBy(offset);
-
-    // traversing deck in search of room for event
-    while (!eventIds[pointer].equals("") && pointer != currentPointer)
-      movePointerBy(1);
-
-    // if pointers match then there is no room in deck for event
-    if (pointer == currentPointer)
-      return;
-
-    eventIds[pointer] = eventUid;
-    pointer = currentPointer;
-  }
-
-  void putOnTop(String eventUid) {
-    movePointerBy(-1);
-    eventIds[pointer] = eventUid;
-  }
-
-  String pop() {
-    var event = eventIds[pointer];
-    if (isEndless) eventIds[pointer] = "";
-    else eventIds[pointer] = Config.GAME_DECK_UNUSABLE_EVENT_SLOT_NAME;
-    movePointerBy(1);
-    return event;
   }
 
   String peek() {
     return eventIds[pointer];
   }
 
-  private void movePointerBy(int steps) {
-    if (steps < -1)
-      throw new IllegalArgumentException("pointer steps can't be lower than -1");
+  String pop() {
+    return eventIds[pointer++];
+  }
 
-    if (steps == -1) {
-      if (pointer + steps < 0)
-        pointer += size;
-      pointer += steps;
-    }
-    if (steps > 0) {
-      if (pointer + steps >= size)
-        pointer -= size;
-      pointer += steps;
-    }
+  boolean isEmpty() {
+    return pointer == size;
+  }
+
+  int cardsLeft() {
+    return size - pointer;
   }
 }
