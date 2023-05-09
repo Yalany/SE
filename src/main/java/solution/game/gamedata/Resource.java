@@ -1,4 +1,4 @@
-package solution.game;
+package solution.game.gamedata;
 
 import com.google.gson.annotations.SerializedName;
 

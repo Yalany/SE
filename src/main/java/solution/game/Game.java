@@ -1,12 +1,14 @@
 package solution.game;
 
 import solution.Config;
+import solution.game.gamedata.GameState;
 import solution.game.gamedata.StaticGameData;
 import solution.util.*;
 import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Game {
   private final Repository<GameState> gameStateRepository;
@@ -17,7 +19,7 @@ public class Game {
     gameStateRepository = new AddressedDiscRepository<>(GameState.class,
         id -> Config.GAME_DATA_DIRECTORY + id + Config.JSON_POSTFIX);
     controllerCache = new HashMapCache<>(Config.GAME_CACHE_TIMEOUT_MILLIS,
-        expired -> gameStateRepository.save(expired.getGameState().gameId(), expired.getGameState()));
+        expired -> gameStateRepository.save(expired.gameState().id(), expired.gameState()));
     staticGameData = SerializationUtils.fromJson(FileUtils.readFile(Config.GAME_STATIC_DATA_PATH), StaticGameData.class);
   }
 
@@ -26,21 +28,29 @@ public class Game {
   }
 
   private GameController getGameController(String id) {
-    if (controllerCache.contains(id))
-      return controllerCache.get(id);
-    if (gameStateRepository.contains(id))
-      return controllerCache.put(id,
-          new GameController(staticGameData, gameStateRepository.load(id), this::removeGame));
-    return controllerCache.put(id,
-        new GameController(staticGameData, gameStateRepository.save(id,
-            new GameState(id,
-                // todo: implement starting resources template
-                new HashMap<>(),
-                new EventDeck(Config.GAME_DECK_DEFAULT_SIZE))), this::removeGame));
+    return controllerCache.contains(id) ?
+        controllerCache.get(id) :
+        gameStateRepository.contains(id) ?
+            controllerCache.put(id, loadController(id)) :
+            controllerCache.put(id, newController(id));
+  }
+
+  private GameController loadController(String id) {
+    return new GameController(staticGameData, this::removeGame, gameStateRepository.load(id));
+  }
+
+  private GameController newController(String id) {
+    return new GameController(staticGameData, this::removeGame, gameStateRepository.save(id,
+            new GameState(id, getStartingResources(), new EventDeck(Config.GAME_DECK_DEFAULT_SIZE))));
   }
 
   private void removeGame(GameState game) {
-    controllerCache.remove(game.gameId());
-    gameStateRepository.remove(game.gameId());
+    controllerCache.remove(game.id());
+    gameStateRepository.remove(game.id());
+  }
+
+  // todo: implement starting resources template
+  private Map<String, Integer> getStartingResources() {
+    return new HashMap<>();
   }
 }

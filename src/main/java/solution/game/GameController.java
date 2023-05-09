@@ -1,30 +1,25 @@
 package solution.game;
 
+import solution.game.gamedata.Event;
+import solution.game.gamedata.GameState;
 import solution.game.gamedata.StaticGameData;
 import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class GameController {
-  private final Consumer<GameState> removeGame;
   private final StaticGameData staticGameData;
+  private final Consumer<GameState> removeGame;
   private final GameState gameState;
-  private final Map<String, Integer> playerResources;
-  private final EventDeck eventDeck;
-  private final Event currentEvent;
 
-  public GameController(StaticGameData staticGameData, GameState gameState, Consumer<GameState> removeGame) {
+  public GameController(StaticGameData staticGameData, Consumer<GameState> removeGame, GameState gameState) {
     this.staticGameData = staticGameData;
-    this.gameState = gameState;
-    this.playerResources = gameState.playerResources();
-    this.eventDeck = gameState.eventDeck();
-    this.currentEvent = staticGameData.events().get(eventDeck.peek());
     this.removeGame = removeGame;
+    this.gameState = gameState;
   }
 
-  public GameState getGameState() {
+  public GameState gameState() {
     return gameState;
   }
 
@@ -37,21 +32,25 @@ public class GameController {
     return null;
   }
 
+  private void terminateGame(String id) {
+    removeGame.accept(gameState);
+  }
+
+  private Event currentEvent() {
+    return staticGameData.events().get(gameState.deck().peek());
+  }
+
   private int getResourceAmount(String resourceName) {
-    assert playerResources.containsKey(resourceName) : "Resource " + resourceName + " does not exist";
-    return playerResources.get(resourceName);
+    assert gameState.resources().containsKey(resourceName) : "Resource " + resourceName + " does not exist";
+    return gameState.resources().get(resourceName);
   }
 
   private void modifyResourceAmount(String resourceName, int modification) {
-    assert playerResources.containsKey(resourceName) : "Resource " + resourceName + " does not exist";
-    playerResources.put(resourceName, playerResources.get(resourceName) + modification);
+    assert gameState.resources().containsKey(resourceName) : "Resource " + resourceName + " does not exist";
+    gameState.resources().put(resourceName, gameState.resources().get(resourceName) + modification);
   }
 
   private void shuffleEvent(String eventId, int offset) {
-    eventDeck.shuffle(eventId, offset);
-  }
-
-  private Event getCurrentEventData() {
-    return currentEvent;
+    gameState.deck().shuffle(eventId, offset);
   }
 }
