@@ -38,12 +38,17 @@ public class Game {
       return controllerCache.get(id);
     if (gameStateRepository.contains(id))
       return controllerCache.put(id,
-          new GameController(staticGameData, gameStateRepository.load(id)));
+          new GameController(staticGameData, gameStateRepository.load(id), this::removeGame));
     return controllerCache.put(id,
         new GameController(staticGameData, gameStateRepository.save(id,
             new GameState(id,
                 // todo: implement starting resources template
                 new HashMap<>(),
-                new EventDeck(Config.GAME_DECK_DEFAULT_SIZE)))));
+                new EventDeck(Config.GAME_DECK_DEFAULT_SIZE))), this::removeGame));
+  }
+
+  private void removeGame(GameState game) {
+    controllerCache.remove(game.gameId());
+    gameStateRepository.remove(game.gameId());
   }
 }

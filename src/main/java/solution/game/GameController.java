@@ -5,20 +5,23 @@ import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class GameController {
+  private final Consumer<GameState> removeGame;
   private final StaticGameData staticGameData;
   private final GameState gameState;
   private final Map<String, Integer> playerResources;
   private final EventDeck eventDeck;
   private final Event currentEvent;
 
-  public GameController(StaticGameData staticGameData, GameState gameState) {
+  public GameController(StaticGameData staticGameData, GameState gameState, Consumer<GameState> removeGame) {
     this.staticGameData = staticGameData;
     this.gameState = gameState;
     this.playerResources = gameState.playerResources();
     this.eventDeck = gameState.eventDeck();
     this.currentEvent = staticGameData.events().get(eventDeck.peek());
+    this.removeGame = removeGame;
   }
 
   public GameState getGameState() {
