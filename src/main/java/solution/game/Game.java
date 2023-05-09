@@ -21,16 +21,8 @@ public class Game {
     staticGameData = SerializationUtils.fromJson(FileUtils.readFile(Config.GAME_STATIC_DATA_PATH), StaticGameData.class);
   }
 
-  // todo: implement remove GameState of ended game from repository
   public Response process(Request request) {
-    var controller = getGameController(request.userId());
-    var response = controller.process(request);
-    cacheGameController(controller);
-    return response;
-  }
-
-  private void cacheGameController(GameController gameController) {
-    controllerCache.put(gameController.getGameState().gameId(), gameController);
+    return getGameController(request.userId()).process(request);
   }
 
   private GameController getGameController(String id) {
