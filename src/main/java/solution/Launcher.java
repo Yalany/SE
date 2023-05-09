@@ -26,11 +26,11 @@ public class Launcher {
   }
 
   private static String getResponse(final String request) {
-    var aliceRequest = SerializationUtils.GSON.fromJson(request, AliceRequest.class);
+    var aliceRequest = SerializationUtils.fromJson(request, AliceRequest.class);
     var gameRequest = new Request(aliceRequest.session.user.userId, aliceRequest.request.nlu.tokens);
     var gameResponse = GAME.process(gameRequest);
     var aliceResponse = formAliceResponse(gameResponse);
-    return SerializationUtils.GSON.toJson(aliceResponse);
+    return SerializationUtils.toJson(aliceResponse);
   }
 
   private static AliceResponse formAliceResponse(final Response gameResponse) {

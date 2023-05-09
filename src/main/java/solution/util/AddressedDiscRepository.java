@@ -13,13 +13,13 @@ public class AddressedDiscRepository<T> implements Repository<T> {
 
   @Override
   public T load(String id) {
-    return SerializationUtils.GSON.fromJson(FileUtils.readFile(storageAddressFunction.apply(id)), typeClass);
+    return SerializationUtils.fromJson(FileUtils.readFile(storageAddressFunction.apply(id)), typeClass);
   }
 
   @Override
   public T save(String id, T t) {
     assert t != null;
-    FileUtils.writeFile(storageAddressFunction.apply(id), SerializationUtils.GSON.toJson(t));
+    FileUtils.writeFile(storageAddressFunction.apply(id), SerializationUtils.toJson(t));
     return t;
   }
 
