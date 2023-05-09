@@ -5,13 +5,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-public final class HashMapRepositoryCache<T> implements Cache<T> {
+public final class HashMapCache<T> implements Cache<T> {
   private final HashMap<String, T> cache = new HashMap<>();
   private final HashMap<String, Timer> timeouts = new HashMap<>();
   private final long ttl;
   private final Consumer<T> expirationCallback;
 
-  public HashMapRepositoryCache(long ttl, Consumer<T> expirationCallback) {
+  public HashMapCache(long ttl, Consumer<T> expirationCallback) {
     this.ttl = ttl;
     this.expirationCallback = expirationCallback;
   }

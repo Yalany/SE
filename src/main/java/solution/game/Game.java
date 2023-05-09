@@ -16,7 +16,7 @@ public class Game {
   public Game() {
     gameStateRepository = new AddressedDiscRepository<>(GameState.class,
         id -> Config.GAME_DATA_DIRECTORY + id + Config.JSON_POSTFIX);
-    controllerCache = new HashMapRepositoryCache<>(Config.GAME_CACHE_TIMEOUT_MILLIS,
+    controllerCache = new HashMapCache<>(Config.GAME_CACHE_TIMEOUT_MILLIS,
         expired -> gameStateRepository.save(expired.getGameState().gameId(), expired.getGameState()));
     staticGameData = SerializationUtils.fromJson(FileUtils.readFile(Config.GAME_STATIC_DATA_PATH), StaticGameData.class);
   }
