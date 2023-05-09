@@ -37,7 +37,7 @@ public class EventDeck {
    * @param offset offset from current pointer position
    */
   void shuffle(String eventId, int offset) {
-    assert 0 <= offset && pointer + offset < size : "offset can't be lower than 0 or greater or equal than deck size";
+    assert 0 <= offset && offset <= cardsLeft() : "offset can't be lower than 0 or greater or equal than deck size";
 
     var tempPointer = pointer + offset;
     while (tempPointer < size) {
