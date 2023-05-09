@@ -35,12 +35,12 @@ public class Launcher {
 
   private static AliceResponse formAliceResponse(final Response gameResponse) {
     var result = new AliceResponse();
-    result.response.text = gameResponse.responseText;
-    result.response.tts = gameResponse.responseText;
+    result.response.text = gameResponse.responseText();
+    result.response.tts = gameResponse.responseText();
     result.response.endSession = false;
-    result.response.buttons = new AliceResponse.Response.Button[gameResponse.options.length];
-    for (int i = 0; i < gameResponse.options.length; i++) {
-      result.response.buttons[i].title = gameResponse.options[i];
+    result.response.buttons = new AliceResponse.Response.Button[gameResponse.options().length];
+    for (int i = 0; i < gameResponse.options().length; i++) {
+      result.response.buttons[i].title = gameResponse.options()[i];
       result.response.buttons[i].hide = true;
     }
     result.version = Config.ALICE_API_VERSION;

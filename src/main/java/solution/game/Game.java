@@ -22,7 +22,7 @@ public class Game {
   }
 
   public Response process(Request request) {
-    var controller = getGameController(request.getUserId());
+    var controller = getGameController(request.userId());
     var response = controller.process(request);
     cacheGameController(controller);
     return response;
