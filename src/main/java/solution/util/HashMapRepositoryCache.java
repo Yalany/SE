@@ -3,23 +3,24 @@ package solution.util;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 
 public final class HashMapRepositoryCache<T> implements Cache<T> {
   private final HashMap<String, T> cache = new HashMap<>();
   private final HashMap<String, Timer> timeouts = new HashMap<>();
+  private final long ttl;
+  private final Consumer<T> expirationCallback;
 
-  private final Repository<T> repository;
-  private final long storageDelay;
-
-  public HashMapRepositoryCache(Repository<T> repository, long storageDelayMillis) {
-    this.repository = repository;
-    this.storageDelay = storageDelayMillis;
+  public HashMapRepositoryCache(long ttl, Consumer<T> expirationCallback) {
+    this.ttl = ttl;
+    this.expirationCallback = expirationCallback;
   }
 
   @Override
-  public void put(String id, T t) {
+  public T put(String id, T t) {
     cache.put(id, t);
     resetTimeout(id);
+    return t;
   }
 
   @Override
@@ -29,7 +30,7 @@ public final class HashMapRepositoryCache<T> implements Cache<T> {
 
   @Override
   public T get(final String id) {
-    assert cache.containsKey(id) : "attempt to get non-cached data from cash with id " + id;
+    assert cache.containsKey(id) : "attempt to get non-cached data from cash with id:" + id;
     resetTimeout(id);
     return cache.get(id);
   }
@@ -38,13 +39,13 @@ public final class HashMapRepositoryCache<T> implements Cache<T> {
     if (timeouts.containsKey(id))
       timeouts.remove(id).cancel();
     var timer = new Timer();
-    timeouts.put(id, timer);
     timer.schedule(new TimerTask() {
       @Override
       public void run() {
-        repository.save(id, cache.remove(id));
+        expirationCallback.accept(cache.remove(id));
         timeouts.remove(id).cancel();
       }
-    }, storageDelay);
+    }, ttl);
+    timeouts.put(id, timer);
   }
 }

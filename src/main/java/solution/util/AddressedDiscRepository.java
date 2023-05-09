@@ -6,7 +6,7 @@ public class AddressedDiscRepository<T> implements Repository<T> {
   private final Function<String, String> storageAddressFunction;
   private final Class<T> typeClass;
 
-  public AddressedDiscRepository(Function<String, String> storageAddressFunction, Class<T> typeClass) {
+  public AddressedDiscRepository(Class<T> typeClass, Function<String, String> storageAddressFunction) {
     this.storageAddressFunction = storageAddressFunction;
     this.typeClass = typeClass;
   }
@@ -17,9 +17,10 @@ public class AddressedDiscRepository<T> implements Repository<T> {
   }
 
   @Override
-  public void save(String id, T t) {
+  public T save(String id, T t) {
     assert t != null;
     FileUtils.writeFile(storageAddressFunction.apply(id), SerializationUtils.GSON.toJson(t));
+    return t;
   }
 
   @Override

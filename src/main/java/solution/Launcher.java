@@ -28,7 +28,7 @@ public class Launcher {
   private static String getResponse(final String request) {
     var aliceRequest = SerializationUtils.GSON.fromJson(request, AliceRequest.class);
     var gameRequest = new Request(aliceRequest.session.user.userId, aliceRequest.request.nlu.tokens);
-    var gameResponse = GAME.handleRequest(gameRequest);
+    var gameResponse = GAME.process(gameRequest);
     var aliceResponse = formAliceResponse(gameResponse);
     return SerializationUtils.GSON.toJson(aliceResponse);
   }

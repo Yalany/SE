@@ -1,17 +1,19 @@
 package solution.game;
 
 import solution.game.gamedata.GameData;
+import solution.game.protocol.Request;
+import solution.game.protocol.Response;
 
 import java.util.Map;
 
-public class GameStateController {
+public class GameController {
   private final GameData gameData;
   private final GameState gameState;
   private final Map<String, Integer> playerResources;
   private final EventDeck eventDeck;
   private final Event currentEvent;
 
-  public GameStateController(GameData gameData, GameState gameState) {
+  public GameController(GameData gameData, GameState gameState) {
     this.gameData = gameData;
     this.gameState = gameState;
     this.playerResources = gameState.getPlayerResources();
@@ -21,6 +23,15 @@ public class GameStateController {
 
   public GameState getGameState() {
     return gameState;
+  }
+
+  public Response process(Request request) {
+    // todo: формирование финального ответа, который будет напрямую озвучен пользователю
+    // int numberOfOptions = 0;
+    // String responseText;
+    // String[] options = new String[numberOfOptions];
+    // new Response(String responseText, String[] options)
+    return null;
   }
 
   private int getResourceAmount(String resourceName) {
