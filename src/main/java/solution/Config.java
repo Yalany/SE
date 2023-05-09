@@ -12,4 +12,5 @@ public interface Config {
   int     GAME_DECK_DEFAULT_SIZE = 30;
   String  GAME_DECK_EMPTY_EVENT_SLOT_NAME = "";
   long    GAME_CACHE_TIMEOUT_MILLIS = 600 * 10000;
+  String  GAME_STATIC_DATA_PATH = "../../resources/game_data/gamedata.json";
 }

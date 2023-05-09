@@ -1,24 +1,24 @@
 package solution.game;
 
-import solution.game.gamedata.GameData;
+import solution.game.gamedata.StaticGameData;
 import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
 import java.util.Map;
 
 public class GameController {
-  private final GameData gameData;
+  private final StaticGameData staticGameData;
   private final GameState gameState;
   private final Map<String, Integer> playerResources;
   private final EventDeck eventDeck;
   private final Event currentEvent;
 
-  public GameController(GameData gameData, GameState gameState) {
-    this.gameData = gameData;
+  public GameController(StaticGameData staticGameData, GameState gameState) {
+    this.staticGameData = staticGameData;
     this.gameState = gameState;
     this.playerResources = gameState.getPlayerResources();
     this.eventDeck = gameState.getEventDeck();
-    this.currentEvent = gameData.getEventData(eventDeck.peek());
+    this.currentEvent = staticGameData.getEventData(eventDeck.peek());
   }
 
   public GameState getGameState() {
