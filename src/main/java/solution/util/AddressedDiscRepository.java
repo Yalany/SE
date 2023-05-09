@@ -29,11 +29,8 @@ public class AddressedDiscRepository<T> implements Repository<T> {
   }
 
   @Override
-  public T remove(String id) {
-    if (!FileUtils.fileExists(storageAddressFunction.apply(id)))
-      throw new IllegalArgumentException("File with id=" + id + " does not exist");
-    var result = SerializationUtils.fromJson(FileUtils.readFile(storageAddressFunction.apply(id)), typeClass);
+  public void remove(String id) {
+    assert FileUtils.fileExists(storageAddressFunction.apply(id)) : "attempt to remove non-existing data from repository with id=" + id;
     FileUtils.deleteFile(storageAddressFunction.apply(id));
-    return result;
   }
 }

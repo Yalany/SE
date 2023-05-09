@@ -8,5 +8,5 @@ public interface Cache<T> {
 
   boolean contains(String id);
 
-  T remove(String id);
+  void remove(String id);
 }

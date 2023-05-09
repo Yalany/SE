@@ -30,15 +30,16 @@ public final class HashMapCache<T> implements Cache<T> {
 
   @Override
   public T get(final String id) {
-    assert cache.containsKey(id) : "attempt to get non-cached data from cash with id:" + id;
+    assert cache.containsKey(id) : "attempt to get non-cached data from cash with id=" + id;
     resetTimeout(id);
     return cache.get(id);
   }
 
   @Override
-  public T remove(String id) {
+  public void remove(String id) {
+    assert cache.containsKey(id) : "attempt to remove non-cached data from cash with id=" + id;
     timeouts.remove(id).cancel();
-    return cache.remove(id);
+    cache.remove(id);
   }
 
   private void resetTimeout(String id) {
