@@ -6,6 +6,8 @@ import solution.util.*;
 import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
+import java.util.HashMap;
+
 public class Game {
   private final Repository<GameState> gameStateRepository;
   private final Cache<GameController> controllerCache;
@@ -15,7 +17,7 @@ public class Game {
     gameStateRepository = new AddressedDiscRepository<>(GameState.class,
         id -> Config.GAME_DATA_DIRECTORY + id + Config.JSON_POSTFIX);
     controllerCache = new HashMapRepositoryCache<>(Config.GAME_CACHE_TIMEOUT_MILLIS,
-        expired -> gameStateRepository.save(expired.getGameState().getGameId(), expired.getGameState()));
+        expired -> gameStateRepository.save(expired.getGameState().gameId(), expired.getGameState()));
     staticGameData = SerializationUtils.fromJson(FileUtils.readFile(Config.GAME_STATIC_DATA_PATH), StaticGameData.class);
   }
 
@@ -27,7 +29,7 @@ public class Game {
   }
 
   private void cacheGameController(GameController gameController) {
-    controllerCache.put(gameController.getGameState().getGameId(), gameController);
+    controllerCache.put(gameController.getGameState().gameId(), gameController);
   }
 
   private GameController getGameController(String id) {
@@ -38,6 +40,9 @@ public class Game {
           new GameController(staticGameData, gameStateRepository.load(id)));
     return controllerCache.put(id,
         new GameController(staticGameData, gameStateRepository.save(id,
-            new GameState(id, Config.GAME_DECK_DEFAULT_SIZE))));
+            new GameState(id,
+                // todo: implement starting resources template
+                new HashMap<>(),
+                new EventDeck(Config.GAME_DECK_DEFAULT_SIZE)))));
   }
 }

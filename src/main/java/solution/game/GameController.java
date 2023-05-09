@@ -16,8 +16,8 @@ public class GameController {
   public GameController(StaticGameData staticGameData, GameState gameState) {
     this.staticGameData = staticGameData;
     this.gameState = gameState;
-    this.playerResources = gameState.getPlayerResources();
-    this.eventDeck = gameState.getEventDeck();
+    this.playerResources = gameState.playerResources();
+    this.eventDeck = gameState.eventDeck();
     this.currentEvent = staticGameData.getEventData(eventDeck.peek());
   }
 
