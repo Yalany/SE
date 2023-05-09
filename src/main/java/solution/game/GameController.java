@@ -1,8 +1,8 @@
 package solution.game;
 
-import solution.game.gamedata.Event;
-import solution.game.gamedata.GameState;
-import solution.game.gamedata.StaticGameData;
+import solution.game.data.Event;
+import solution.game.data.GameState;
+import solution.game.data.StaticGameData;
 import solution.game.protocol.Request;
 import solution.game.protocol.Response;
 
