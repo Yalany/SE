@@ -35,6 +35,14 @@ public final class HashMapCache<T> implements Cache<T> {
     return cache.get(id);
   }
 
+  @Override
+  public T remove(String id) {
+    timeouts.remove(id).cancel();
+    var removed = cache.remove(id);
+    expirationCallback.accept(removed);
+    return removed;
+  }
+
   private void resetTimeout(String id) {
     if (timeouts.containsKey(id))
       timeouts.remove(id).cancel();

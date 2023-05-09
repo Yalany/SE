@@ -27,4 +27,13 @@ public class AddressedDiscRepository<T> implements Repository<T> {
   public boolean contains(String id) {
     return FileUtils.fileExists(storageAddressFunction.apply(id));
   }
+
+  @Override
+  public T remove(String id) {
+    if (!FileUtils.fileExists(storageAddressFunction.apply(id)))
+      throw new IllegalArgumentException("File with id=" + id + " does not exist");
+    var result = SerializationUtils.fromJson(FileUtils.readFile(storageAddressFunction.apply(id)), typeClass);
+    FileUtils.deleteFile(storageAddressFunction.apply(id));
+    return result;
+  }
 }

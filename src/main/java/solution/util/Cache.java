@@ -7,4 +7,6 @@ public interface Cache<T> {
   T put(String id, T t);
 
   boolean contains(String id);
+
+  T remove(String id);
 }

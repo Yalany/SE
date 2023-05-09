@@ -7,4 +7,6 @@ public interface Repository<T> {
   T save(String id, T t);
 
   boolean contains(String id);
+
+  T remove(String id);
 }
