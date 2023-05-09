@@ -1,25 +1,7 @@
 package solution.game;
 
-public class Resource {
-  private final String name;
-  private final int startingAmount;
-  private final int minimumAmount;
+import com.google.gson.annotations.SerializedName;
 
-  public Resource(String name, int startingAmount, int minimumAmount) {
-    this.name = name;
-    this.startingAmount = startingAmount;
-    this.minimumAmount = minimumAmount;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getStartingAmount() {
-    return startingAmount;
-  }
-
-  public int getMinimumAmount() {
-    return minimumAmount;
-  }
-}
+public record Resource(@SerializedName("name") String name,
+                       @SerializedName("starting_amount") int startingAmount,
+                       @SerializedName("minimum_amount") int minimumAmount) {}
