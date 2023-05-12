@@ -40,17 +40,20 @@ public class Game {
   }
 
   private GameController newController(String id) {
-    return new GameController(staticGameData, this::removeGame, gameStateRepository.save(id,
-            new GameState(id, getStartingResources(), new EventDeck(Config.GAME_DECK_DEFAULT_SIZE))));
+    return new GameController(staticGameData, this::removeGame, gameStateRepository.save(id, newGameState(id)));
   }
 
-  private void removeGame(GameState game) {
-    controllerCache.remove(game.id());
-    gameStateRepository.remove(game.id());
+  private GameState newGameState(String id) {
+    return new GameState(id, getStartingResources(), new EventDeck(Config.GAME_DECK_DEFAULT_SIZE));
   }
 
   // todo: implement starting resources template
   private Map<String, Integer> getStartingResources() {
     return new HashMap<>();
+  }
+
+  private void removeGame(GameState game) {
+    controllerCache.remove(game.id());
+    gameStateRepository.remove(game.id());
   }
 }
